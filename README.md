@@ -55,4 +55,4 @@ attack = forge.create("Attack.sol:Attack", setup_addr, value=int(1*(10**18)))
 attack = deploy_contract("Attack.sol", setup.address, value=int(1*(10**18))) # or "Attack.Sol:Attack" to specify the class
 ```
 
-You can check for more examples in the [example](./example/) directory.
+You can check for more examples in the [example](https://github.com/Wrth1/foundpy/tree/main/example) directory.
