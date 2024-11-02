@@ -35,6 +35,14 @@ def encode_arguments(function_signature, *args):
     return encode_abi(types, args)
 
 @call_check_setup
+def get_age(block_number):
+    return get_block(block_number)["timestamp"]
+
+@call_check_setup
 def get_balance(addr):
     balance = config.w3.eth.get_balance(addr)
     return balance
+
+@call_check_setup
+def get_block(block_number):
+    return config.w3.eth.get_block(block_number)

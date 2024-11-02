@@ -49,6 +49,12 @@ class Contract:
             }
             return config.w3.eth.call(tx)
     
+    def code(self):
+        return config.w3.eth.get_code(self.address)
+    
+    def codesize(self):
+        return len(self.code())
+
     def send(self, func_name, *args, value=0):
         if self.abi:
             return getattr(self.contract.functions, func_name)(*args).transact({"value":value})
@@ -64,6 +70,9 @@ class Contract:
             }
             tx_hash = config.w3.eth.send_transaction(tx)
             return tx_hash
+        
+    def storage(self, slot):
+        return config.w3.eth.get_storage_at(self.address, slot)
 
     def get_abi(self):
         return compile_file(self.file)['abi']
