@@ -46,3 +46,7 @@ def get_balance(addr):
 @call_check_setup
 def get_block(block_number):
     return config.w3.eth.get_block(block_number)
+
+@call_check_setup
+def get_tx(tx_hash):
+    return config.w3.eth.get_transaction(tx_hash)

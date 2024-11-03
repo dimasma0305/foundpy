@@ -38,5 +38,8 @@ class Cast():
         contract = Contract(contract_address)
         return contract.storage(slot)
     
+    def tx(self, tx_hash):
+        return get_tx(tx_hash)
+
     # todo
-    # tx, logs
+    # logs
