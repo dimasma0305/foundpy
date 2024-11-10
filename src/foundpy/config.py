@@ -40,7 +40,6 @@ class Config():
         import base64
         import struct
         import requests
-        # from Crypto.Util.number import bytes_to_long, long_to_bytes
         try:
             self.tcp1p_session
         except:
@@ -88,13 +87,39 @@ class Config():
         wallet = resp_json['4']['Wallet']
         message = resp_json['message']
 
-        print(f"UUID: {uuid}\nRPC Endpoint: {rpc_endpoint}\nPrivate Key: {private_key}\nSetup Contract: {setup_contract}\nWallet: {wallet}\nMessage: {message}")
+        print(f"UUID: {uuid}")
+        print(f"RPC Endpoint: {rpc_endpoint}")
+        print(f"Private Key: {private_key}")
+        print(f"Setup Contract: {setup_contract}")
+        print(f"Wallet: {wallet}")
+        print(f"Message: {message}")
+
         self.setup(
             rpc_url=rpc_endpoint,
             privkey=private_key
         )
-        self.tcp1p_flag = lambda: session.get(self.tcp1p_url + "/flag").json()['message']
+        self.flag = lambda: session.get(self.tcp1p_url + "/flag").json()['message']
 
+    def from_htb(self, address, restart=False):
+        import time
+        import requests
+        self.htb_url = address
+        if restart:
+            print("Restarting...")
+            response = requests.get(self.htb_url + "/restart")
+            # sleep for a while to let the server restart
+            time.sleep(15)
+            print("Restarted")
+        response = requests.get(self.htb_url + "/connection_info").json()
+        print(f"PrivateKey: {response['PrivateKey']}")
+        print(f"Address: {response['Address']}")
+        print(f"setupAddress: {response['setupAddress']}")
+        print(f"TargetAddress: {response['TargetAddress']}")
+        self.setup(
+            rpc_url=address+"/rpc",
+            privkey=response['PrivateKey']
+        )
+        self.flag = lambda: requests.get(self.htb_url + "/flag").text
 
 def check_setup():
     global is_warned

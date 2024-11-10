@@ -41,5 +41,6 @@ class Cast():
     def tx(self, tx_hash):
         return get_tx(tx_hash)
 
+    
     # todo
     # logs
