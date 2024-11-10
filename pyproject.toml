@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "foundpy"
-version = "0.1.0"
+version = "0.2.0"
 authors = [
   { name="Bill Elim", email="billelimgg@gmail.com" },
 ]
@@ -19,6 +19,7 @@ classifiers = [
 dependencies = [
     "eth_abi >= 5.1.0",
     "py_solc_x >= 2.0.3",
+    "Requests >= 2.32.3",
     "web3 >= 7.4.0",
 ]
 
