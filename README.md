@@ -55,6 +55,13 @@ also if you are playing HackTheBox challenges, you can use the `config.from_htb`
 config.from_htb(address="http://94.237.59.180:51929")
 ```
 
+Once you have solved the challenges, simply call the `config.flag()` function
+
+```py
+assert setup.call("isSolved")
+print(config.flag())
+```
+
 ### Interacting with Contracts
 
 To interact with a contract, you can either use the `cast` object or instantiate a `Contract` object (source code required).
