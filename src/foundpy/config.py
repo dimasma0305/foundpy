@@ -99,6 +99,7 @@ class Config():
             privkey=private_key
         )
         self.flag = lambda: session.get(self.tcp1p_url + "/flag").json()['message']
+        return {"uuid": uuid, "rpc_endpoint": rpc_endpoint, "private_key": private_key, "setup_contract": setup_contract, "wallet": wallet, "message": message}
 
     def from_htb(self, address, restart=False):
         import time
@@ -120,6 +121,7 @@ class Config():
             privkey=response['PrivateKey']
         )
         self.flag = lambda: requests.get(self.htb_url + "/flag").text
+        return response
 
 def check_setup():
     global is_warned
