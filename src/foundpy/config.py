@@ -18,8 +18,8 @@ class Config():
             solcx.install_solc()
             latest_solc_version = solcx.get_installed_solc_versions()
 
-        solcx.set_solc_version(latest_solc_version[-1])
-        self.solc_version = latest_solc_version[-1]
+        solcx.set_solc_version(latest_solc_version[0])
+        self.solc_version = latest_solc_version[0]
 
     def setup(self, rpc_url, privkey):
         self.is_setup = True
@@ -32,7 +32,7 @@ class Config():
 
     def change_solc_version(self, version):
         if version == "latest":
-            version = solcx.get_installed_solc_versions()[-1]
+            version = solcx.get_installed_solc_versions()[0]
         solcx.install_solc(version)
         solcx.set_solc_version(version)
         self.solc_version = version
