@@ -26,7 +26,8 @@ class Config():
         self.rpc_url = rpc_url
         self.privkey = privkey
         self.w3 = Web3(HTTPProvider(rpc_url))
-        self.wallet = self.w3.eth.account.from_key(privkey)
+        from .contract import Account
+        self.wallet = Account(self.w3.eth.account.from_key(privkey))
         self.w3.eth.default_account = self.wallet.address
 
     def change_solc_version(self, version):
@@ -65,7 +66,7 @@ class Config():
             d_bytes = base64.standard_b64decode(parts[1])
             d = struct.unpack(">I", d_bytes)[0]
             x_bytes = base64.standard_b64decode(parts[2])
-            x = int.from_bytes(x_bytes)
+            x = int.from_bytes(x_bytes, byteorder="big")
 
             for _ in range(d):
                 x = pow(x, EXP, MOD)
