@@ -1,3 +1,4 @@
+import re
 from .config import *
 
 def compile_file(filename):
@@ -23,6 +24,12 @@ def compile_file(filename):
     return compiled_sol[possible_contract[0]]
 
 def calculate_function_selector(function_signature):
+    """
+    Calculate the function selector for a function signature
+    Automatically changes uint to uint256 and int to int256
+    """
+    function_signature = re.sub(r"\buint\b", "uint256", function_signature)
+    function_signature = re.sub(r"\bint\b", "int256", function_signature)
     return Web3.keccak(text=function_signature)[:4]
 
 def encode_arguments(function_signature, *args):

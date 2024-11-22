@@ -25,6 +25,7 @@ class Account:
 @check_setup_on_create
 class Contract:
     def __init__(self, addr, file=None, abi=None) -> None:
+        addr = Web3.to_checksum_address(addr)
         self.file = file
         self.address = addr
         self.abi = None
