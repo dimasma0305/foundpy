@@ -46,13 +46,15 @@ config.change_solc_version("0.8.13")
 if you are doing a CTF Challenges and it uses the [TCP1P ParadigmCTF Infra](https://github.com/TCP1P/Paradigmctf-BlockChain-Infra-Extended), you can use the `config.from_tcp1p` function instead of `config.setup`
 
 ```py
-config.from_tcp1p("http://103.178.153.113:30001")
+result = config.from_tcp1p("http://103.178.153.113:30001")
+setup = Contract(result["setup_contract"], "Setup.Sol")
 ```
 
 also if you are playing HackTheBox challenges, you can use the `config.from_htb` function
 
 ```py
-config.from_htb(address="http://94.237.59.180:51929")
+result config.from_htb(address="http://94.237.59.180:51929")
+setup = Contract(result["setupAddress"], "Setup.Sol")
 ```
 
 Once you have solved the challenges, simply call the `config.flag()` function
