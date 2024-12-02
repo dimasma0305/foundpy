@@ -41,6 +41,7 @@ class Config():
         import base64
         import struct
         import requests
+        from tqdm import trange
         try:
             self.tcp1p_session
         except:
@@ -68,7 +69,7 @@ class Config():
             x_bytes = base64.standard_b64decode(parts[2])
             x = int.from_bytes(x_bytes, byteorder="big")
 
-            for _ in range(d):
+            for _ in trange(d):
                 x = pow(x, EXP, MOD)
                 x ^= 1
             x_bytes = int.to_bytes(x, (x.bit_length()+7)//8)
