@@ -56,13 +56,13 @@ class Contract:
     def codesize(self):
         return len(self.code())
 
-    def send(self, func_name, *args, value=0, gas=None):        
+    def send(self, func_name, *args, value=0, gas_limit=None):        
         if self.abi:
             tx = {
                 "value": value,
             }
-            if gas:
-                tx["gas"] = gas
+            if gas_limit:
+                tx["gas"] = gas_limit
             return getattr(self.contract.functions, func_name)(*args).transact(tx)
         else:
             function_selector = calculate_function_selector(func_name)
@@ -74,8 +74,8 @@ class Contract:
                 "data": data,
                 "value": value
             }
-            if gas:
-                tx["gas"] = gas
+            if gas_limit:
+                tx["gas"] = gas_limit
             tx_hash = config.w3.eth.send_transaction(tx)
             return tx_hash
         

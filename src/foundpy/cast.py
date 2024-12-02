@@ -30,9 +30,9 @@ class Cast():
         contract = Contract(contract_address)
         return contract.codesize()
 
-    def send(self, contract_address, function_signature, *args, value=0, gas=None):
+    def send(self, contract_address, function_signature, *args, value=0, gas_limit=None):
         contract = Contract(contract_address)
-        return contract.send(function_signature, *args, value=value, gas=gas)
+        return contract.send(function_signature, *args, value=value, gas_limit=gas_limit)
 
     def storage(self, contract_address, slot):
         contract = Contract(contract_address)
