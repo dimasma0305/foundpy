@@ -56,7 +56,9 @@ class Contract:
     def codesize(self):
         return len(self.code())
 
-    def send(self, func_name, *args, value=0, gas_limit=None):        
+    def send(self, func_name, *args, value=0, gas_limit=None):
+        if func_name == "":
+            return config.wallet.send(self.address, value)
         if self.abi:
             tx = {
                 "value": value,
