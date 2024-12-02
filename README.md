@@ -53,7 +53,7 @@ setup = Contract(result["setup_contract"], "Setup.Sol")
 also if you are playing HackTheBox challenges, you can use the `config.from_htb` function
 
 ```py
-result config.from_htb(address="http://94.237.59.180:51929")
+result = config.from_htb(address="http://94.237.59.180:51929")
 setup = Contract(result["setupAddress"], "Setup.Sol")
 ```
 
@@ -70,10 +70,10 @@ To interact with a contract, you can either use the `cast` object or instantiate
 
 ```py
 setup_addr = "0xE162F3696944255cc2850eb73418D34023884D1E"
-cast.send(setup_addr, "solve(bytes)", b"args123" value=0)
+cast.send(setup_addr, "solve(bytes)", b"args123" value=ether(0.5))
 # or
 setup = Contract(setup_addr, "Setup.Sol") # or "Setup.Sol:Setup" to specify the class
-setup.send("solve", b"args123", value=0)
+setup.send("solve", b"args123", value=ether(0.5))
 ```
 
 ### Deploying Contracts
@@ -82,10 +82,10 @@ To deploy a contract, you can either use the `forge` object or use the `deploy_c
 
 ```py
 # This will return an address
-attack = forge.create("Attack.sol:Attack", setup_addr, value=int(1*(10**18)))
+attack = forge.create("Attack.sol:Attack", setup_addr, value=ether(1))
 # or
 # This will return a Contract object, which you can interact with attack.call or attack.send
-attack = deploy_contract("Attack.sol", setup.address, value=int(1*(10**18))) # or "Attack.Sol:Attack" to specify the class
+attack = deploy_contract("Attack.sol", setup.address, value=ether(1)) # or "Attack.Sol:Attack" to specify the class
 ```
 
 You can check for more examples in the [example](https://github.com/Wrth1/foundpy/tree/main/example) directory.
