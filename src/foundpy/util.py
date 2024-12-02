@@ -41,6 +41,9 @@ def encode_arguments(function_signature, *args):
     assert len(types) == len(args), "Length of types and number of arguments mismatch"
     return encode_abi(types, args)
 
+def ether(x):
+    return x * 10**18
+
 @call_check_setup
 def get_age(block_number):
     return get_block(block_number)["timestamp"]
