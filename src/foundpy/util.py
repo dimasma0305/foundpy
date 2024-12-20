@@ -1,14 +1,14 @@
 import re
 from .config import *
 
-def compile_file(filename):
+def compile_file(filename, import_remappings={}):
     splittedfile = filename.split(":")
     if len(splittedfile) > 1:
         filename = splittedfile[0]
         contract_name = splittedfile[1]
     else:
         contract_name = None
-    compiled_sol = solcx.compile_source(open(filename).read(), solc_version=config.solc_version ,output_values=['abi', 'bin'])
+    compiled_sol = solcx.compile_source(open(filename).read(), solc_version=config.solc_version ,output_values=['abi', 'bin'], import_remappings=import_remappings)
     possible_contract = []
     if contract_name:
         for contract_id, contract_interface in compiled_sol.items():

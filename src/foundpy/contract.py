@@ -24,11 +24,12 @@ class Account:
 
 @check_setup_on_create
 class Contract:
-    def __init__(self, addr, file=None, abi=None) -> None:
+    def __init__(self, addr, file=None, abi=None, import_remappings={}) -> None:
         addr = Web3.to_checksum_address(addr)
         self.file = file
         self.address = addr
         self.abi = None
+        self.import_remappings = import_remappings
         if abi:
             self.abi = abi
             self.contract = config.w3.eth.contract(addr, abi=abi)
@@ -85,14 +86,14 @@ class Contract:
         return config.w3.eth.get_storage_at(self.address, slot)
 
     def get_abi(self):
-        return compile_file(self.file)['abi']
+        return compile_file(self.file, self.import_remappings)['abi']
     
     def get_balance(self):
         return get_balance(self.address)
 
 @call_check_setup
-def deploy_contract(file, *args, value=0):
-    compiled_sol = compile_file(file)
+def deploy_contract(file, *args, value=0, import_remappings={}):
+    compiled_sol = compile_file(file, import_remappings)
     abi = compiled_sol['abi']
     bytecode = compiled_sol['bin']
     contract = config.w3.eth.contract(abi=abi, bytecode=bytecode)
