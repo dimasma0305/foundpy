@@ -60,27 +60,32 @@ class Contract:
     def send(self, func_name, *args, value=0, gas_limit=None):
         if func_name == "":
             return config.wallet.send(self.address, value)
+        tx = {
+            "value": value,
+            "nonce": config.w3.eth.get_transaction_count(config.wallet.address),
+            "gasPrice": config.w3.eth.gas_price
+        }
+        if gas_limit:
+            tx["gas"] = gas_limit
+            
         if self.abi:
-            tx = {
-                "value": value,
-            }
-            if gas_limit:
-                tx["gas"] = gas_limit
-            return getattr(self.contract.functions, func_name)(*args).transact(tx)
+            tx = getattr(self.contract.functions, func_name)(*args).build_transaction(tx)
         else:
             function_selector = calculate_function_selector(func_name)
             encoded_args = encode_arguments(func_name, *args)
             data = function_selector + encoded_args
-            tx = {
+            tx.update({
                 "from": config.wallet.address,
                 "to": self.address,
                 "data": data,
-                "value": value
-            }
-            if gas_limit:
-                tx["gas"] = gas_limit
-            tx_hash = config.w3.eth.send_transaction(tx)
-            return tx_hash
+                "value": value,
+            })
+            tx["gas"] = config.w3.eth.estimate_gas(tx)
+        
+        # tx_hash = config.w3.eth.send_transaction(tx)
+        signed_tx = config.w3.eth.account.sign_transaction(tx, config.privkey)
+        tx_hash = config.w3.eth.send_raw_transaction(signed_tx.raw_transaction)
+        return tx_hash
         
     def storage(self, slot):
         return config.w3.eth.get_storage_at(self.address, slot)
@@ -97,7 +102,16 @@ def deploy_contract(file, *args, value=0, import_remappings={}):
     abi = compiled_sol['abi']
     bytecode = compiled_sol['bin']
     contract = config.w3.eth.contract(abi=abi, bytecode=bytecode)
-    tx_hash = contract.constructor(*args).transact({"from":config.wallet.address, "value":value})
+    # tx_hash = contract.constructor(*args).transact({"from":config.wallet.address, "value":value})
+    tx = contract.constructor(*args).build_transaction({
+        "from": config.wallet.address,
+        "value": value,
+        "nonce": config.w3.eth.get_transaction_count(config.wallet.address),
+        "gasPrice": config.w3.eth.gas_price
+    })
+    tx["gas"] = config.w3.eth.estimate_gas(tx)
+    signed_tx = config.w3.eth.account.sign_transaction(tx, config.privkey)
+    tx_hash = config.w3.eth.send_raw_transaction(signed_tx.raw_transaction)
     tx_receipt = config.w3.eth.wait_for_transaction_receipt(tx_hash)
     contract = Contract(tx_receipt.contractAddress, file, abi)
     return contract
