@@ -63,7 +63,8 @@ class Contract:
         tx = {
             "value": value,
             "nonce": config.w3.eth.get_transaction_count(config.wallet.address),
-            "gasPrice": config.w3.eth.gas_price
+            "gasPrice": config.w3.eth.gas_price,
+            "chainId": config.w3.eth.chain_id
         }
         if gas_limit:
             tx["gas"] = gas_limit
@@ -107,7 +108,8 @@ def deploy_contract(file, *args, value=0, import_remappings={}):
         "from": config.wallet.address,
         "value": value,
         "nonce": config.w3.eth.get_transaction_count(config.wallet.address),
-        "gasPrice": config.w3.eth.gas_price
+        "gasPrice": config.w3.eth.gas_price,
+        "chainId": config.w3.eth.chain_id
     })
     tx["gas"] = config.w3.eth.estimate_gas(tx)
     signed_tx = config.w3.eth.account.sign_transaction(tx, config.privkey)
