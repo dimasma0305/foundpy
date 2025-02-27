@@ -36,7 +36,7 @@ class Contract:
         elif file:
             self.abi = self.get_abi()
             self.contract = config.w3.eth.contract(addr, abi=self.abi)
-
+        
     def call(self, func_name, *args):
         if self.abi:
             return getattr(self.contract.functions, func_name)(*args).call()
@@ -96,6 +96,18 @@ class Contract:
     
     def get_balance(self):
         return get_balance(self.address)
+    
+    def storage_layout(self):
+        if not self.file:
+            raise Exception("No file provided for storage layout.")
+        return compile_file(self.file, self.import_remappings)['storage-layout']
+    
+    def get_private_variable_offset(self, name) -> int:
+        storage_layout = self.storage_layout()
+        for variable in storage_layout['storage']:
+            if variable['label'] == name:
+                return variable['offset']
+        raise Exception(f'Variable {name} not found in storage layout.')
 
 @call_check_setup
 def deploy_contract(file, *args, value=0, import_remappings={}):
