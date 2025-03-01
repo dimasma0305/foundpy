@@ -108,6 +108,11 @@ class Contract:
             if variable['label'] == name:
                 return variable['offset']
         raise Exception(f'Variable {name} not found in storage layout.')
+    
+    @classmethod
+    def deploy_contract(cls, file, *args, value=0, import_remappings={}):
+        contract = deploy_contract(file, *args, value=value, import_remappings=import_remappings)
+        return cls(contract.address, file=contract.file, abi=contract.abi, import_remappings=contract.import_remappings)
 
 @call_check_setup
 def deploy_contract(file, *args, value=0, import_remappings={}):
